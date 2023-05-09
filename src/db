@@ -1,0 +1,16 @@
+{
+  "todos": [
+    {
+      "id": "e957b83a-59bc-49c2-aeb8-49bb174cac9e",
+      "date": "2023-05-09T00:42:53.287Z",
+      "content": "ToDo",
+      "done": false
+    },
+    {
+      "id": "85e59237-47d2-452e-a316-ca8545ea8bd9",
+      "date": "2023-05-09T00:42:53.289Z",
+      "content": "ToDo 2",
+      "done": false
+    }
+  ]
+}
