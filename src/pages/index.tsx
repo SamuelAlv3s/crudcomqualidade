@@ -1,8 +1,26 @@
+import { todoController } from "@/ui/controller/todo";
 import { GlobalStyles } from "@ui/theme/GlobalStyles";
+import { useEffect, useState } from "react";
+
+interface HomeTodo {
+  id: string;
+  content: string;
+}
 
 const bg = "/bg.jpeg";
 
 export default function Home() {
+  const [todos, setTodos] = useState<Array<HomeTodo>>([]);
+
+  const fetchTodos = async () => {
+    const todosData = await todoController.get();
+    setTodos(todosData);
+  };
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
   return (
     <main>
       <GlobalStyles themeName="indigo" />
@@ -40,22 +58,18 @@ export default function Home() {
           </thead>
 
           <tbody>
-            <tr>
-              <td>
-                <input type="checkbox" />
-              </td>
-              <td>d4f26</td>
-              <td>
-                Conteúdo de uma TODO Lorem ipsum dolor sit amet consectetur
-                adipisicing elit. Eaque vero facilis obcaecati, autem aliquid
-                eius! Consequatur eaque doloribus laudantium soluta optio odit,
-                provident, ab voluptates doloremque voluptas recusandae
-                aspernatur aperiam.
-              </td>
-              <td align="right">
-                <button data-type="delete">Apagar</button>
-              </td>
-            </tr>
+            {todos.map((todo) => (
+              <tr key={todo.id}>
+                <td>
+                  <input type="checkbox" />
+                </td>
+                <td>{todo.id.substring(0, 4)}</td>
+                <td>{todo.content}</td>
+                <td align="right">
+                  <button data-type="delete">Apagar</button>
+                </td>
+              </tr>
+            ))}
 
             <tr>
               <td colSpan={4} align="center" style={{ textAlign: "center" }}>
