@@ -1,7 +1,7 @@
 import fs from "fs";
 import { v4 as uuid } from "uuid";
 
-const DB_FILE_PATH = "./src/db";
+const DB_FILE_PATH = "./db";
 
 type UUID = string;
 
@@ -41,7 +41,6 @@ export function read(): Array<Todo> {
   if (!db.todos) {
     return [];
   }
-
   return db.todos;
 }
 
@@ -99,9 +98,9 @@ function deleteById(id: UUID) {
   );
 }
 
-clearDB();
-create("ToDo");
-create("ToDo 2");
-const task = create("ToDo 3");
-update(task.id, { content: "New Todo 3" });
-deleteById(task.id);
+// clearDB();
+// create("ToDo");
+// create("ToDo 2");
+// const task = create("ToDo 3");
+// update(task.id, { content: "New Todo 3" });
+// deleteById(task.id);

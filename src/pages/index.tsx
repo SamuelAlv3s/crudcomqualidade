@@ -10,16 +10,21 @@ interface HomeTodo {
 const bg = "/bg.jpeg";
 
 export default function Home() {
+  const [totalPages, setTotalPages] = useState(0);
+  const [page, setPage] = useState(1);
   const [todos, setTodos] = useState<Array<HomeTodo>>([]);
 
+  const hasMorePages = totalPages > page;
+
   const fetchTodos = async () => {
-    const todosData = await todoController.get();
-    setTodos(todosData);
+    const { todos, pages } = await todoController.get({ page });
+    setTodos((oldTodos) => [...oldTodos, ...todos]);
+    setTotalPages(pages);
   };
 
   useEffect(() => {
     fetchTodos();
-  }, []);
+  }, [page]);
 
   return (
     <main>
@@ -83,22 +88,24 @@ export default function Home() {
               </td>
             </tr>
 
-            <tr>
-              <td colSpan={4} align="center" style={{ textAlign: "center" }}>
-                <button data-type="load-more">
-                  Carregar mais{" "}
-                  <span
-                    style={{
-                      display: "inline-block",
-                      marginLeft: "4px",
-                      fontSize: "1.2em",
-                    }}
-                  >
-                    ↓
-                  </span>
-                </button>
-              </td>
-            </tr>
+            {hasMorePages && (
+              <tr>
+                <td colSpan={4} align="center" style={{ textAlign: "center" }}>
+                  <button data-type="load-more" onClick={() => setPage(page + 1)}>
+                    Página {page}, Carregar mais{" "}
+                    <span
+                      style={{
+                        display: "inline-block",
+                        marginLeft: "4px",
+                        fontSize: "1.2em",
+                      }}
+                    >
+                      ↓
+                    </span>
+                  </button>
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </section>
