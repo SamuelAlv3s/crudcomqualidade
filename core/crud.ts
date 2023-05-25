@@ -1,7 +1,7 @@
 import fs from "fs";
 import { v4 as uuid } from "uuid";
 
-const DB_FILE_PATH = "./db";
+const DB_FILE_PATH = "./core/db";
 
 type UUID = string;
 
@@ -36,7 +36,11 @@ function create(content: string): Todo {
 }
 
 export function read(): Array<Todo> {
+  console.log("read");
+
   const db = JSON.parse(fs.readFileSync(DB_FILE_PATH, "utf-8") || "{}");
+
+  console.log(db);
 
   if (!db.todos) {
     return [];
