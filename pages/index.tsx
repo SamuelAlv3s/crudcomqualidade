@@ -1,4 +1,4 @@
-import { todoController } from "@/ui/controller/todo";
+import { todoController } from "@ui/controller/todo";
 import { GlobalStyles } from "@ui/theme/GlobalStyles";
 import { useEffect, useState } from "react";
 
@@ -10,20 +10,32 @@ interface HomeTodo {
 const bg = "/bg.jpeg";
 
 export default function Home() {
+  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(1);
   const [todos, setTodos] = useState<Array<HomeTodo>>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const hasMorePages = totalPages > page;
+  const hasNoTodos = todos.length === 0 && !isLoading;
 
-  const fetchTodos = async () => {
-    const { todos, pages } = await todoController.get({ page });
-    setTodos((oldTodos) => [...oldTodos, ...todos]);
+  const fetchTodos = async (nextPage?: number) => {
+    setIsLoading(true);
+    const { todos, pages } = await todoController.get({ page: nextPage || page });
+    if (nextPage) {
+      setTodos((prevTodos) => [...prevTodos, ...todos]);
+    } else {
+      setTodos(todos);
+    }
     setTotalPages(pages);
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    fetchTodos();
+    setInitialLoadComplete(true);
+    if (!initialLoadComplete) {
+      fetchTodos();
+    }
   }, [page]);
 
   return (
@@ -75,23 +87,33 @@ export default function Home() {
                 </td>
               </tr>
             ))}
+            {isLoading && (
+              <tr>
+                <td colSpan={4} align="center" style={{ textAlign: "center" }}>
+                  Carregando...
+                </td>
+              </tr>
+            )}
 
-            <tr>
-              <td colSpan={4} align="center" style={{ textAlign: "center" }}>
-                Carregando...
-              </td>
-            </tr>
-
-            <tr>
-              <td colSpan={4} align="center">
-                Nenhum item encontrado
-              </td>
-            </tr>
+            {hasNoTodos && (
+              <tr>
+                <td colSpan={4} align="center">
+                  Nenhum item encontrado
+                </td>
+              </tr>
+            )}
 
             {hasMorePages && (
               <tr>
                 <td colSpan={4} align="center" style={{ textAlign: "center" }}>
-                  <button data-type="load-more" onClick={() => setPage(page + 1)}>
+                  <button
+                    data-type="load-more"
+                    onClick={() => {
+                      const nextPage = page + 1;
+                      setPage(nextPage);
+                      fetchTodos(nextPage);
+                    }}
+                  >
                     Página {page}, Carregar mais{" "}
                     <span
                       style={{

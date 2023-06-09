@@ -36,8 +36,6 @@ function create(content: string): Todo {
 }
 
 export function read(): Array<Todo> {
-  console.log("read");
-
   const db = JSON.parse(fs.readFileSync(DB_FILE_PATH, "utf-8") || "{}");
 
   console.log(db);
@@ -101,10 +99,3 @@ function deleteById(id: UUID) {
     )
   );
 }
-
-// clearDB();
-// create("ToDo");
-// create("ToDo 2");
-// const task = create("ToDo 3");
-// update(task.id, { content: "New Todo 3" });
-// deleteById(task.id);

@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { read } from "../../../core/crud";
 
 function get(_: NextApiRequest, res: NextApiResponse) {
-  console.log("get");
   const allTodos = read();
   res.status(200).json({
     todos: allTodos,

@@ -15,9 +15,8 @@
     "jsx": "preserve",
     "incremental": true,
     "paths": {
-      "@/*": ["./src/*"],
       "@ui/*": ["./src/ui/*"],
-      "@db-crud-todo": ["core/crud.ts"],
+      "@db-crud-todo": ["./core/crud.ts"],
       "@server/*": ["./src/server/*"]
     }
   },

@@ -18,9 +18,7 @@ interface Todo {
 async function get({ page, limit }: TodoRepositoryGetParams): Promise<TodoRepositoryGetOutput> {
   const response = await fetch("/api/todos");
   const data = await response.json();
-  const allTodos = parseTodoFromServer(data).todos;
-
-  console.log("allTodos", allTodos);
+  const allTodos = parseTodosFromServer(data).todos;
 
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
@@ -32,7 +30,7 @@ async function get({ page, limit }: TodoRepositoryGetParams): Promise<TodoReposi
   };
 }
 
-function parseTodoFromServer(responseBody: unknown): { todos: Array<Todo> } {
+function parseTodosFromServer(responseBody: unknown): { todos: Array<Todo> } {
   if (responseBody !== null && typeof responseBody === "object" && "todos" in responseBody && Array.isArray(responseBody.todos)) {
     return {
       todos: responseBody.todos.map((todo: unknown) => {
