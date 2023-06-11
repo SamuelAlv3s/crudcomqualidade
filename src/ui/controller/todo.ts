@@ -1,11 +1,25 @@
+import { Todo } from "@ui/schema/todo";
 import { todoRepository } from "../repository/todo";
+import { z as schema } from "zod";
 
 interface TodoControllerGetParams {
   page: number;
 }
-async function get({ page }: TodoControllerGetParams) {
+
+interface TodoControllerCreateParams {
+  content: string;
+  onSuccess: (todo: Todo) => void;
+  onError: () => void;
+}
+
+interface TodoControllerToggleDoneParams {
+  id: string;
+  updateTodoOnScreen: () => void;
+}
+
+async function get(params: TodoControllerGetParams) {
   return todoRepository.get({
-    page: page || 1,
+    page: params.page,
     limit: 2,
   });
 }
@@ -17,7 +31,24 @@ function filterTodosByContent<Todo>(search: string, todos: Array<Todo & { conten
   return homeTodos;
 }
 
+function create({ content, onError, onSuccess }: TodoControllerCreateParams) {
+  const parsedParams = schema.string().nonempty().safeParse(content);
+  if (!parsedParams.success) {
+    onError();
+    return;
+  }
+
+  todoRepository.createByContent(parsedParams.data).then(onSuccess).catch(onError);
+}
+
+function toggleDone({ id, updateTodoOnScreen }: TodoControllerToggleDoneParams) {
+  updateTodoOnScreen();
+  todoRepository.toggleDone(id);
+}
+
 export const todoController = {
   get,
   filterTodosByContent,
+  create,
+  toggleDone,
 };

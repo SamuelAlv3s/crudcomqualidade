@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 interface HomeTodo {
   id: string;
   content: string;
+  done: boolean;
 }
 
 const bg = "/bg.jpeg";
@@ -17,6 +18,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
   const homeTodos = todoController.filterTodosByContent<HomeTodo>(search, todos);
+  const [newTodoContent, setNewTodoContent] = useState("");
 
   const hasMorePages = totalPages > page;
   const hasNoTodos = homeTodos.length === 0 && !isLoading;
@@ -34,8 +36,31 @@ export default function Home() {
     initialLoadComplete.current = true;
   };
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handlerSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
+  };
+
+  const newTodoHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTodoContent(event.target.value);
+  };
+
+  const handlerToggle = (todo: HomeTodo) => {
+    todoController.toggleDone({
+      id: todo.id,
+      updateTodoOnScreen() {
+        setTodos((currentTodos) => {
+          return currentTodos.map((currentTodo) => {
+            if (currentTodo.id === todo.id) {
+              return {
+                ...currentTodo,
+                done: !currentTodo.done,
+              };
+            }
+            return currentTodo;
+          });
+        });
+      },
+    });
   };
 
   useEffect(() => {
@@ -55,8 +80,24 @@ export default function Home() {
         <div className="typewriter">
           <h1>O que fazer hoje?</h1>
         </div>
-        <form>
-          <input type="text" placeholder="Correr, Estudar..." />
+        <form
+          onSubmit={(event) => {
+            event.preventDefault();
+            todoController.create({
+              content: newTodoContent,
+              onSuccess(todo: HomeTodo) {
+                setTodos((oldTodos) => {
+                  return [todo, ...oldTodos];
+                });
+                setNewTodoContent("");
+              },
+              onError() {
+                alert("Você precisar informar o conteúdo da todo");
+              },
+            });
+          }}
+        >
+          <input type="text" placeholder="Correr, Estudar..." value={newTodoContent} onChange={newTodoHandler} />
           <button type="submit" aria-label="Adicionar novo item">
             +
           </button>
@@ -65,7 +106,7 @@ export default function Home() {
 
       <section>
         <form>
-          <input type="text" placeholder="Filtrar lista atual, ex: Dentista" onChange={handleSearch} />
+          <input type="text" placeholder="Filtrar lista atual, ex: Dentista" onChange={handlerSearch} />
         </form>
 
         <table border={1}>
@@ -84,10 +125,13 @@ export default function Home() {
             {homeTodos.map((todo) => (
               <tr key={todo.id}>
                 <td>
-                  <input type="checkbox" />
+                  <input type="checkbox" defaultChecked={todo.done} onChange={() => handlerToggle(todo)} />
                 </td>
                 <td>{todo.id.substring(0, 4)}</td>
-                <td>{todo.content}</td>
+                <td>
+                  {!todo.done && todo.content}
+                  {todo.done && <s>todo.content</s>}
+                </td>
                 <td align="right">
                   <button data-type="delete">Apagar</button>
                 </td>

@@ -1,3 +1,6 @@
+import { Todo, TodoSchema } from "@ui/schema/todo";
+import { z as schema } from "zod";
+
 interface TodoRepositoryGetParams {
   page: number;
   limit: number;
@@ -8,51 +11,111 @@ interface TodoRepositoryGetOutput {
   pages: number;
 }
 
-interface Todo {
-  id: string;
-  content: string;
-  date: Date;
-  done: boolean;
-}
-
 async function get({ page, limit }: TodoRepositoryGetParams): Promise<TodoRepositoryGetOutput> {
-  const response = await fetch("/api/todos");
-  const data = await response.json();
-  const allTodos = parseTodosFromServer(data).todos;
+  return fetch(`/api/todos?page=${page}&limit=${limit}`).then(async (respostaDoServidor) => {
+    const todosString = await respostaDoServidor.text();
+    const responseParsed = parseTodosFromServer(JSON.parse(todosString));
 
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-  const paginatedTodos = allTodos.slice(startIndex, endIndex);
-  return {
-    todos: paginatedTodos,
-    total: allTodos.length,
-    pages: Math.ceil(allTodos.length / limit),
-  };
+    return {
+      total: responseParsed.total,
+      todos: responseParsed.todos,
+      pages: responseParsed.pages,
+    };
+  });
 }
 
-function parseTodosFromServer(responseBody: unknown): { todos: Array<Todo> } {
-  if (responseBody !== null && typeof responseBody === "object" && "todos" in responseBody && Array.isArray(responseBody.todos)) {
+function parseTodosFromServer(responseBody: unknown): {
+  total: number;
+  pages: number;
+  todos: Array<Todo>;
+} {
+  if (responseBody !== null && typeof responseBody === "object" && "todos" in responseBody && "total" in responseBody && "pages" in responseBody && Array.isArray(responseBody.todos)) {
     return {
+      total: Number(responseBody.total),
+      pages: Number(responseBody.pages),
       todos: responseBody.todos.map((todo: unknown) => {
         if (todo === null && typeof todo !== "object") {
           throw new Error("Invalid todo from API");
         }
-        const { id, content, date, done } = todo as { id: string; content: string; date: string; done: string };
+
+        const { id, content, done, date } = todo as {
+          id: string;
+          content: string;
+          date: string;
+          done: string;
+        };
+
         return {
           id,
           content,
-          date: new Date(date),
           done: String(done).toLowerCase() === "true",
+          date: date,
         };
       }),
     };
   }
 
   return {
+    pages: 1,
+    total: 0,
     todos: [],
   };
 }
 
+async function createByContent(content: string): Promise<Todo> {
+  const response = await fetch("/api/todos", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      content,
+    }),
+  });
+
+  if (response.ok) {
+    const serverResponse = await response.json();
+    const serverResponseSchema = schema.object({
+      todo: TodoSchema,
+    });
+    const serverResponseParsed = serverResponseSchema.safeParse(serverResponse);
+
+    if (!serverResponseParsed.success) {
+      throw new Error("Failed to create todo");
+    }
+
+    const todo = serverResponseParsed.data.todo;
+    return todo;
+  }
+
+  throw new Error("Failed to create todo");
+}
+
+async function toggleDone(todoId: string): Promise<Todo> {
+  const response = await fetch(`/api/todos/${todoId}/toggle-done`, {
+    method: "PUT",
+  });
+
+  if (response.ok) {
+    const serverResponse = await response.json();
+    const serverResponseSchema = schema.object({
+      todo: TodoSchema,
+    });
+    const serverResponseParsed = serverResponseSchema.safeParse(serverResponse);
+
+    if (!serverResponseParsed.success) {
+      throw new Error("Failed to update todo");
+    }
+
+    const todo = serverResponseParsed.data.todo;
+    return todo;
+  }
+
+  throw new Error("Failed to update todo");
+}
+
 export const todoRepository = {
   get,
+  createByContent,
+  toggleDone,
 };

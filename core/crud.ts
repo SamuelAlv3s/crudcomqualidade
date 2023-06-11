@@ -12,7 +12,7 @@ interface Todo {
   done: boolean;
 }
 
-function create(content: string): Todo {
+export function create(content: string): Todo {
   const todo: Todo = {
     id: uuid(),
     date: new Date().toISOString(),
@@ -44,7 +44,7 @@ export function read(): Array<Todo> {
   return db.todos;
 }
 
-function update(id: UUID, partialTodo: Partial<Todo>) {
+export function update(id: UUID, partialTodo: Partial<Todo>) {
   let updatedTodo;
   const todos = read();
 
