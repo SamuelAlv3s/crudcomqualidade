@@ -81,7 +81,7 @@ function clearDB() {
   fs.writeFileSync(DB_FILE_PATH, "");
 }
 
-function deleteById(id: UUID) {
+export function deleteById(id: UUID) {
   const todos = read();
 
   const todosWithoutOne = todos.filter((todo) => todo.id !== id);

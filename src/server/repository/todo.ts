@@ -1,4 +1,4 @@
-import { read, create, update } from "@db-crud-todo";
+import { read, create, update, deleteById as dbDeletById } from "@db-crud-todo";
 import { Todo } from "@ui/schema/todo";
 
 interface TodoRepositoryGetParams {
@@ -48,8 +48,20 @@ async function toggleDone(id: string): Promise<Todo> {
   return updatedTodo;
 }
 
+async function deleteById(id: string): Promise<void> {
+  const ALL_TODOS = read();
+  const todo = ALL_TODOS.find((todo) => todo.id === id);
+
+  if (!todo) {
+    throw new Error("Todo not found");
+  }
+
+  dbDeletById(todo.id);
+}
+
 export const todoRepository = {
   get,
   createByContent,
   toggleDone,
+  deleteById,
 };
