@@ -38,8 +38,6 @@ function create(content: string): Todo {
 export function read(): Array<Todo> {
   const db = JSON.parse(fs.readFileSync(DB_FILE_PATH, "utf-8") || "{}");
 
-  console.log(db);
-
   if (!db.todos) {
     return [];
   }

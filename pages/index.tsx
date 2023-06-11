@@ -1,6 +1,6 @@
 import { todoController } from "@ui/controller/todo";
 import { GlobalStyles } from "@ui/theme/GlobalStyles";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface HomeTodo {
   id: string;
@@ -10,14 +10,16 @@ interface HomeTodo {
 const bg = "/bg.jpeg";
 
 export default function Home() {
-  const [initialLoadComplete, setInitialLoadComplete] = useState(false);
+  const initialLoadComplete = useRef(false);
   const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(1);
   const [todos, setTodos] = useState<Array<HomeTodo>>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const homeTodos = todoController.filterTodosByContent<HomeTodo>(search, todos);
 
   const hasMorePages = totalPages > page;
-  const hasNoTodos = todos.length === 0 && !isLoading;
+  const hasNoTodos = homeTodos.length === 0 && !isLoading;
 
   const fetchTodos = async (nextPage?: number) => {
     setIsLoading(true);
@@ -29,11 +31,15 @@ export default function Home() {
     }
     setTotalPages(pages);
     setIsLoading(false);
+    initialLoadComplete.current = true;
+  };
+
+  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
   };
 
   useEffect(() => {
-    setInitialLoadComplete(true);
-    if (!initialLoadComplete) {
+    if (!initialLoadComplete.current) {
       fetchTodos();
     }
   }, [page]);
@@ -59,7 +65,7 @@ export default function Home() {
 
       <section>
         <form>
-          <input type="text" placeholder="Filtrar lista atual, ex: Dentista" />
+          <input type="text" placeholder="Filtrar lista atual, ex: Dentista" onChange={handleSearch} />
         </form>
 
         <table border={1}>
@@ -75,7 +81,7 @@ export default function Home() {
           </thead>
 
           <tbody>
-            {todos.map((todo) => (
+            {homeTodos.map((todo) => (
               <tr key={todo.id}>
                 <td>
                   <input type="checkbox" />
