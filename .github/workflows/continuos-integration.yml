@@ -9,9 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: "Install dependencies"
+      - name: "Debug"
         run: |
-          "npm install"
+          "ls -la"
           "echo 'Hello World'"
+      - name: "Install dependencies"
+        run: "npm install"
       - name: "Lint"
         run: "npm run lint"
