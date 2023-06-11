@@ -7,7 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint ./**/*.{jsx,js,tsx,ts}",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "cy:open": "cypress open",
+    "cy:run": "cypress run",
+    "test": "start-server-and-test dev http://localhost:3000 cy:run"
   },
   "dependencies": {
     "@types/node": "20.1.0",
@@ -25,8 +28,10 @@
   "devDependencies": {
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "cypress": "^12.14.0",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-cypress": "^2.13.3",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-n": "^15.6.1",
     "eslint-plugin-prettier": "^4.2.1",

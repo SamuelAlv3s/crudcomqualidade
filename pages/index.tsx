@@ -110,8 +110,14 @@ export default function Home() {
             });
           }}
         >
-          <input type="text" placeholder="Correr, Estudar..." value={newTodoContent} onChange={newTodoHandler} />
-          <button type="submit" aria-label="Adicionar novo item">
+          <input name="new-todo" type="text" placeholder="Correr, Estudar..." value={newTodoContent} onChange={newTodoHandler} />
+          <button
+            type="submit"
+            aria-label="Adicionar novo item"
+            onClick={() => {
+              setNewTodoContent(newTodoContent);
+            }}
+          >
             +
           </button>
         </form>
