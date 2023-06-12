@@ -72,25 +72,19 @@ export function GlobalStyles({ themeName }: { themeName?: ThemeName }) {
           ${Object.keys(theme.neutral)
             .map(
               (key) => `
-            --color-primary-${key}: ${
-                theme.primary[key as keyof typeof theme.primary]
-              };`
+            --color-primary-${key}: ${theme.primary[key as keyof typeof theme.primary]};`
             )
             .join("")}
           ${Object.keys(theme.neutral)
             .map(
               (key) => `
-            --color-neutral-${key}: ${
-                theme.neutral[key as keyof typeof theme.neutral]
-              };`
+            --color-neutral-${key}: ${theme.neutral[key as keyof typeof theme.neutral]};`
             )
             .join("")}
             ${Object.keys(theme.negative)
             .map(
               (key) => `
-              --color-negative-${key}: ${
-                theme.negative[key as keyof typeof theme.negative]
-              };`
+              --color-negative-${key}: ${theme.negative[key as keyof typeof theme.negative]};`
             )
             .join("")}
         }
@@ -157,9 +151,7 @@ export function GlobalStyles({ themeName }: { themeName?: ThemeName }) {
           }
         }
         body {
-          font-family: ui-sans-serif, system-ui, -apple-system,
-            BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial,
-            Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji,
+          font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, Apple Color Emoji, Segoe UI Emoji,
             Segoe UI Symbol, Noto Color Emoji;
         }
         // [Header Area]
@@ -210,10 +202,7 @@ export function GlobalStyles({ themeName }: { themeName?: ThemeName }) {
           margin-top: 16px;
           display: flex;
           align-items: stretch;
-          box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px,
-            rgba(0, 0, 0, 0.05) 0px 0px 0px 1px,
-            rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
-            rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
+          box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
         }
         header form input {
           --outline: var(--color-neutral-x100);
@@ -284,10 +273,7 @@ export function GlobalStyles({ themeName }: { themeName?: ThemeName }) {
           padding: 16px 32px;
           padding-left: calc(16px + 2px + var(--iconSize));
           width: 100%;
-          box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px,
-            rgba(0, 0, 0, 0.05) 0px 0px 0px 1px,
-            rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
-            rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
+          box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
         }
         // == [Table Reset]
         table {
@@ -309,10 +295,7 @@ export function GlobalStyles({ themeName }: { themeName?: ThemeName }) {
           margin: 0 auto;
           max-width: 600px;
           margin-top: 16px;
-          box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px,
-            rgba(0, 0, 0, 0.05) 0px 0px 0px 1px,
-            rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
-            rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
+          box-shadow: rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
         }
         thead {
           background-color: var(--color-neutral-x050);
@@ -367,8 +350,7 @@ export function GlobalStyles({ themeName }: { themeName?: ThemeName }) {
           white-space: nowrap; /* Keeps the content on a single line */
           margin: 0 auto; /* Gives that scrolling effect as the typing happens */
           letter-spacing: 0.05em; /* Adjust as needed */
-          animation: typing 3s steps(40, end),
-            blink-caret 0.75s step-end infinite;
+          animation: typing 3s steps(40, end), blink-caret 0.75s step-end infinite;
         }
         /* The typing effect */
         @keyframes typing {
