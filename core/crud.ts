@@ -73,11 +73,11 @@ export function update(id: UUID, partialTodo: Partial<Todo>) {
   return updatedTodo;
 }
 
-function updateContentById(id: UUID, content: string): Todo {
+export function updateContentById(id: UUID, content: string): Todo {
   return update(id, { content });
 }
 
-function clearDB() {
+export function clearDB() {
   fs.writeFileSync(DB_FILE_PATH, "");
 }
 

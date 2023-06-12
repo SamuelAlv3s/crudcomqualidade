@@ -7,7 +7,7 @@ module.exports = {
     "cypress/globals": true,
   },
   plugins: ["react", "prettier", "@typescript-eslint", "cypress"],
-  extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:react/recommended", "plugin:cypress/recommended ", "plugin:prettier/recommended"],
+  extends: ["eslint:recommended", "plugin:@typescript-eslint/recommended", "plugin:react/recommended", "plugin:cypress/recommended", "plugin:prettier/recommended"],
   overrides: [],
   parserOptions: {
     ecmaVersion: "latest",
@@ -23,5 +23,11 @@ module.exports = {
     // "no-console": "error",
     "react/no-unknown-property": ["error", { ignore: ["jsx", "global"] }],
     "react/react-in-jsx-scope": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "auto",
+      },
+    ],
   },
 };

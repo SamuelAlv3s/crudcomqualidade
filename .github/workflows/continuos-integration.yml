@@ -1,0 +1,28 @@
+name: "[CI] Continuos Integration"
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Debug"
+        run: |
+          ls -la
+          echo 'Hello World'
+      - name: "Install dependencies"
+        run: "npm install"
+      - name: "Lint"
+        run: "npm run lint"
+  test:
+    runs-on: ubuntu-latest
+    container: cypress/browsers:node16.16.0-chrome107-ff107-edge
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Install dependencies"
+        run: "npm install"
+      - name: "Test"
+        run: "npm run test"
