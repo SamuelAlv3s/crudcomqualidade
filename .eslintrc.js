@@ -23,6 +23,11 @@ module.exports = {
     // "no-console": "error",
     "react/no-unknown-property": ["error", { ignore: ["jsx", "global"] }],
     "react/react-in-jsx-scope": "off",
-    "prettier/prettier": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        endOfLine: "auto",
+      },
+    ],
   },
 };
