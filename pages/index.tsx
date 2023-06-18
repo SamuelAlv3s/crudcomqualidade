@@ -149,7 +149,7 @@ export default function Home() {
                 <td>{todo.id.substring(0, 4)}</td>
                 <td>
                   {!todo.done && todo.content}
-                  {todo.done && <s>todo.content</s>}
+                  {todo.done && <s>{todo.content}</s>}
                 </td>
                 <td align="right">
                   <button data-type="delete" onClick={() => handlerDeleteTodo(todo)}>
