@@ -1,0 +1,17 @@
+name: "[CD] Continuos Delivery"
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+# push:
+#   branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: "Install dependencies"
+        run: "npm install"
+      - name: "Vercel"
+        run: "npx vercel --prod"
