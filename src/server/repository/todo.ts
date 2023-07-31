@@ -16,7 +16,7 @@ async function get({ page, limit }: TodoRepositoryGetParams = {}): Promise<TodoR
   const startIndex = (currentPage - 1) * currentLimit;
   const endIndex = currentPage * currentLimit;
 
-  const { data, error, count } = await supabase
+  const { data, error, count } = await supabase()
     .from("todos")
     .select("*", {
       count: "exact",
@@ -46,7 +46,7 @@ async function get({ page, limit }: TodoRepositoryGetParams = {}): Promise<TodoR
 }
 
 async function createByContent(content: string): Promise<Todo> {
-  const { data, error } = await supabase.from("todos").insert([{ content }]).select().single();
+  const { data, error } = await supabase().from("todos").insert([{ content }]).select().single();
   if (error) {
     throw new Error(error.message);
   }
@@ -63,7 +63,7 @@ async function createByContent(content: string): Promise<Todo> {
 }
 
 async function toggleDone(id: string): Promise<Todo> {
-  const { data, error } = await supabase.from("todos").select("*").eq("id", id).single();
+  const { data, error } = await supabase().from("todos").select("*").eq("id", id).single();
 
   if (error) {
     throw new Error(error.message);
@@ -77,7 +77,7 @@ async function toggleDone(id: string): Promise<Todo> {
 
   const todo = parsedData.data;
 
-  const { data: updatedData, error: updateError } = await supabase.from("todos").update({ done: !todo.done }).eq("id", id).select().single();
+  const { data: updatedData, error: updateError } = await supabase().from("todos").update({ done: !todo.done }).eq("id", id).select().single();
 
   if (updateError) {
     throw new Error(updateError.message);
@@ -95,7 +95,7 @@ async function toggleDone(id: string): Promise<Todo> {
 }
 
 async function deleteById(id: string): Promise<void> {
-  const { error } = await supabase.from("todos").delete().match({ id });
+  const { error } = await supabase().from("todos").delete().match({ id });
 
   if (error) {
     throw new Error(error.message);

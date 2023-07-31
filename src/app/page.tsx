@@ -1,3 +1,4 @@
+"use client";
 import { todoController } from "@ui/controller/todo";
 import { GlobalStyles } from "@ui/theme/GlobalStyles";
 import { useEffect, useRef, useState } from "react";

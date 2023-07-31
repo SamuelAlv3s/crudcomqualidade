@@ -2,6 +2,11 @@ import { createClient } from "@supabase/supabase-js";
 
 const supabaseUrl = process.env.SUPABASE_URL || "";
 const supabaseKey = process.env.SUPABASE_SECRET_KEY || "";
-const supabase = createClient(supabaseUrl, supabaseKey);
 
-export { supabase };
+export function supabase() {
+  return createClient(supabaseUrl, supabaseKey, {
+    auth: {
+      persistSession: false,
+    },
+  });
+}
